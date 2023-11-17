@@ -3,15 +3,13 @@
 
 #include "lcd_config.h"
 
-static struct lcd_interface {
+typedef struct lcd_interface {
     size_t rs_port;
     size_t rs_pin;
     size_t rw_port;
     size_t rw_pin;
     size_t e_port;
     size_t e_pin;
-    size_t d0_port;
-    size_t d0_pin;
     size_t d0_port;
     size_t d0_pin;
     size_t d1_port;
@@ -29,31 +27,9 @@ static struct lcd_interface {
     size_t d7_port;
     size_t d7_pin;
     uint32_t pulse_delay;
-} lcd_interface = {
-    .rs_port = RS_GPIO_Port,
-    .rs_pin = RS_Pin,
-    .rw_port = RW_GPIO_Port,
-    .rw_pin = RW_Pin,
-    .e_port = E_GPIO_Port,
-    .e_pin = E_Pin,
-    .d0_port = D0_GPIO_Port,
-    .d0_pin = D0_Pin,
-    .d1_port = D1_GPIO_Port,
-    .d1_pin = D1_Pin,
-    .d2_port = D2_GPIO_Port,
-    .d2_pin = D2_Pin,
-    .d3_port = D3_GPIO_Port,
-    .d3_pin = D3_Pin,
-    .d4_port = D4_GPIO_Port,
-    .d4_pin = D4_Pin,
-    .d5_port = D5_GPIO_Port,
-    .d5_pin = D5_Pin,
-    .d6_port = D6_GPIO_Port,
-    .d6_pin = D6_Pin,
-    .d7_port = D7_GPIO_Port,
-    .d7_pin = D7_Pin,
-    .pulse_delay = 1
-};
+} lcd_interface;
+
+extern lcd_interface lcd;
 
 typedef enum {
     RS = 0b00000010 << 7,
@@ -75,7 +51,6 @@ typedef enum {
 
 void lcd_pulse();
 void lcd_update(uint16_t data);
-
 void lcd_init();
 void lcd_send_char(char c);
 void lcd_send_string(const char *s);

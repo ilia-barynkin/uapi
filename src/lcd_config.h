@@ -97,4 +97,4 @@
 #define D7_Pin 7
 #endif
 
-#endif  // CONFIG_H
+#endif  // LCD_CONFIG_H
