@@ -28,22 +28,22 @@ lcd_interface lcd = {
 };
 
 void lcd_pulse() {
-    uapi_mcu.set_pin(lcd.e_port, lcd.e_pin);
-    uapi_mcu.delay(lcd.pulse_delay);
-    uapi_mcu.clear_pin(lcd.e_port, lcd.e_pin);
+    mcu.set_pin(lcd.e_port, lcd.e_pin);
+    mcu.delay(lcd.pulse_delay);
+    mcu.clear_pin(lcd.e_port, lcd.e_pin);
 }
 
 void lcd_update(uint16_t data) {
-    uapi_mcu.write_pin(lcd.rs_port, lcd.rs_pin, data & RS);
-    uapi_mcu.write_pin(lcd.rw_port, lcd.rw_pin, data & RW);
-    uapi_mcu.write_pin(lcd.d7_port, lcd.d7_pin, data & D7);
-    uapi_mcu.write_pin(lcd.d6_port, lcd.d6_pin, data & D6);
-    uapi_mcu.write_pin(lcd.d5_port, lcd.d5_pin, data & D5);
-    uapi_mcu.write_pin(lcd.d4_port, lcd.d4_pin, data & D4);
-    uapi_mcu.write_pin(lcd.d3_port, lcd.d3_pin, data & D3);
-    uapi_mcu.write_pin(lcd.d2_port, lcd.d2_pin, data & D2);
-    uapi_mcu.write_pin(lcd.d1_port, lcd.d1_pin, data & D1);
-    uapi_mcu.write_pin(lcd.d0_port, lcd.d0_pin, data & D0);
+    mcu.write_pin(lcd.rs_port, lcd.rs_pin, data & RS);
+    mcu.write_pin(lcd.rw_port, lcd.rw_pin, data & RW);
+    mcu.write_pin(lcd.d7_port, lcd.d7_pin, data & D7);
+    mcu.write_pin(lcd.d6_port, lcd.d6_pin, data & D6);
+    mcu.write_pin(lcd.d5_port, lcd.d5_pin, data & D5);
+    mcu.write_pin(lcd.d4_port, lcd.d4_pin, data & D4);
+    mcu.write_pin(lcd.d3_port, lcd.d3_pin, data & D3);
+    mcu.write_pin(lcd.d2_port, lcd.d2_pin, data & D2);
+    mcu.write_pin(lcd.d1_port, lcd.d1_pin, data & D1);
+    mcu.write_pin(lcd.d0_port, lcd.d0_pin, data & D0);
 
     lcd_pulse();
 }
@@ -55,11 +55,11 @@ void lcd_init() {
 
 	for(size_t i=0; i < sizeof(init_bytes); ++i)
 	{
-		uapi_mcu.delay(200);
+		mcu.delay(200);
 		lcd_update(init_bytes[i]);
 	}
 
-	uapi_mcu.delay(20);
+	mcu.delay(20);
 }
 
 void lcd_send_char(char c) {

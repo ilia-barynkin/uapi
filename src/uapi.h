@@ -16,35 +16,13 @@ typedef enum
   ST_SET
 } rst_t;
 
-inline void delay(volatile uint32_t ms) {
-    while (ms > 0) {
-        ms--;
-    }
-}
-
-inline void write_bit(size_t reg, size_t shift, rst_t value) {
-    (reg) = ((reg) & ~(ST_SET << (shift))) | ((value) << (shift));
-}
-
-inline void write(size_t reg, uint32_t value) {
-    (reg) = (value);
-}
-
-inline rst_t read_bit(size_t reg, size_t shift) {
-    return ((reg) & (ST_SET << (shift))) ? ST_SET : ST_REST_SET;
-}
-
-inline void toggle_bit(size_t reg, size_t shift) {
-    (reg) ^= (ST_SET << (shift));
-}
-
-inline void set_bit(size_t reg, size_t shift) {
-    (reg) |= (ST_SET << (shift));
-}
-
-inline void clear_bit(size_t reg, size_t shift) {
-    (reg) &= ~(ST_SET << (shift));
-}
+void delay(volatile uint32_t ms);
+void write_bit(size_t reg, size_t shift, rst_t value);
+void write(size_t reg, uint32_t value);
+rst_t read_bit(size_t reg, size_t shift);
+void toggle_bit(size_t reg, size_t shift);
+void set_bit(size_t reg, size_t shift);
+void clear_bit(size_t reg, size_t shift);
 
 typedef void (*delay_fn)(uint32_t ms);
 typedef void (*write_bit_fn)(size_t reg, size_t shift, uint8_t value);
@@ -64,6 +42,6 @@ typedef struct uapi {
     clear_bit_fn clear_pin;
 } uapi;
 
-extern uapi uapi_mcu;
+extern uapi mcu;
 
 #endif //UAPI_H
