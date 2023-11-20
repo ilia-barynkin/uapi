@@ -1,16 +1,13 @@
 #ifndef LCD_CONFIG_H
 #define LCD_CONFIG_H
 
-#ifndef GPIOB
-#define GPIOB 42
-#endif
-
-#ifndef GPIOC
-#define GPIOC 42
+// Placeholder for preprocessing passes
+#ifndef GPIOX
+#define GPIOX 42
 #endif
 
 #ifndef RS_GPIO_Port
-#define RS_GPIO_Port GPIOB
+#define RS_GPIO_Port GPIOX
 #endif
 
 #ifndef RS_Pin
@@ -18,7 +15,7 @@
 #endif
 
 #ifndef RW_GPIO_Port
-#define RW_GPIO_Port GPIOB
+#define RW_GPIO_Port GPIOX
 #endif
 
 #ifndef RW_Pin
@@ -26,7 +23,7 @@
 #endif
 
 #ifndef E_GPIO_Port
-#define E_GPIO_Port GPIOB
+#define E_GPIO_Port GPIOX
 #endif
 
 #ifndef E_Pin
@@ -34,7 +31,7 @@
 #endif
 
 #ifndef D0_GPIO_Port
-#define D0_GPIO_Port GPIOC
+#define D0_GPIO_Port GPIOX
 #endif
 
 #ifndef D0_Pin
@@ -42,7 +39,7 @@
 #endif
 
 #ifndef D1_GPIO_Port
-#define D1_GPIO_Port GPIOC
+#define D1_GPIO_Port GPIOX
 #endif
 
 #ifndef D1_Pin
@@ -50,7 +47,7 @@
 #endif
 
 #ifndef D2_GPIO_Port
-#define D2_GPIO_Port GPIOC
+#define D2_GPIO_Port GPIOX
 #endif
 
 #ifndef D2_Pin
@@ -58,7 +55,7 @@
 #endif
 
 #ifndef D3_GPIO_Port
-#define D3_GPIO_Port GPIOC
+#define D3_GPIO_Port GPIOX
 #endif
 
 #ifndef D3_Pin
@@ -66,7 +63,7 @@
 #endif
 
 #ifndef D4_GPIO_Port
-#define D4_GPIO_Port GPIOC
+#define D4_GPIO_Port GPIOX
 #endif
 
 #ifndef D4_Pin
@@ -74,7 +71,7 @@
 #endif
 
 #ifndef D5_GPIO_Port
-#define D5_GPIO_Port GPIOC
+#define D5_GPIO_Port GPIOX
 #endif
 
 #ifndef D5_Pin
@@ -82,7 +79,7 @@
 #endif
 
 #ifndef D6_GPIO_Port
-#define D6_GPIO_Port GPIOC
+#define D6_GPIO_Port GPIOX
 #endif
 
 #ifndef D6_Pin
@@ -90,7 +87,7 @@
 #endif
 
 #ifndef D7_GPIO_Port
-#define D7_GPIO_Port GPIOC
+#define D7_GPIO_Port GPIOX
 #endif
 
 #ifndef D7_Pin
