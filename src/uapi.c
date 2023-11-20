@@ -9,9 +9,13 @@ void delay(volatile uint32_t ms) {
 
 void write_bit(volatile uint32_t reg, volatile uint32_t shift, rst_t value) {
     (reg) = ((reg) & ~(ST_SET << (shift))) | ((value) << (shift));
+
+    #ifdef DEBUG
+    printf("write_bit: 0x%X, 0x%X, 0x%X\r\n", reg, shift, value);
+    #endif
 }
 
-void write(volatile uint32_t reg, uint32_t value) {
+void write(volatile uint32_t reg, volatile uint32_t value) {
     (reg) = (value);
 }
 
@@ -30,13 +34,3 @@ void set_bit(volatile uint32_t reg, volatile uint32_t shift) {
 void clear_bit(volatile uint32_t reg, volatile uint32_t shift) {
     (reg) &= ~(ST_SET << (shift));
 }
-
-uapi mcu = {
-    .delay = delay,
-    .write_pin = write_bit,
-    .write = write,
-    .read_pin = read_bit,
-    .toggle_pin = toggle_bit,
-    .set_pin = set_bit,
-    .clear_pin = clear_bit
-};

@@ -4,38 +4,38 @@
 #include "lcd_config.h"
 
 typedef struct lcd_interface {
-    size_t rs_port;
-    size_t rs_pin;
-    size_t rw_port;
-    size_t rw_pin;
-    size_t e_port;
-    size_t e_pin;
-    size_t d0_port;
-    size_t d0_pin;
-    size_t d1_port;
-    size_t d1_pin;
-    size_t d2_port;
-    size_t d2_pin;
-    size_t d3_port;
-    size_t d3_pin;
-    size_t d4_port;
-    size_t d4_pin;
-    size_t d5_port;
-    size_t d5_pin;
-    size_t d6_port;
-    size_t d6_pin;
-    size_t d7_port;
-    size_t d7_pin;
-    uint32_t pulse_delay;
+    volatile uint32_t rs_port;
+    volatile uint32_t rs_pin;
+    volatile uint32_t rw_port;
+    volatile uint32_t rw_pin;
+    volatile uint32_t e_port;
+    volatile uint32_t e_pin;
+    volatile uint32_t d0_port;
+    volatile uint32_t d0_pin;
+    volatile uint32_t d1_port;
+    volatile uint32_t d1_pin;
+    volatile uint32_t d2_port;
+    volatile uint32_t d2_pin;
+    volatile uint32_t d3_port;
+    volatile uint32_t d3_pin;
+    volatile uint32_t d4_port;
+    volatile uint32_t d4_pin;
+    volatile uint32_t d5_port;
+    volatile uint32_t d5_pin;
+    volatile uint32_t d6_port;
+    volatile uint32_t d6_pin;
+    volatile uint32_t d7_port;
+    volatile uint32_t d7_pin;
+    volatile uint32_t pulse_delay;
 } lcd_interface;
 
 extern lcd_interface lcd;
 
 typedef enum {
-    RS = 0b00000010 << 7,
-    RW = 0b00000001 << 7,
-    LCD_COMMAND = RS | RW,
-    LCD_DATA = RS
+    RS = 0x0200,
+    RW = 0x0100,
+    LCD_COMMAND = ~RS | ~RW,
+    LCD_DATA = RS | ~RW
 } lcd_flags;
 
 typedef enum {

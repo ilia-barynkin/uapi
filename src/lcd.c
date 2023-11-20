@@ -1,5 +1,6 @@
 #include "uapi.h"
 #include "lcd.h"
+#include "assert.h"
 
 lcd_interface lcd = {
     .rs_port = RS_GPIO_Port,
@@ -24,26 +25,32 @@ lcd_interface lcd = {
     .d6_pin = D6_Pin,
     .d7_port = D7_GPIO_Port,
     .d7_pin = D7_Pin,
-    .pulse_delay = 1
+    .pulse_delay = 20
 };
 
 void lcd_pulse() {
-    mcu.set_pin(lcd.e_port, lcd.e_pin);
+    mcu.write_pin(lcd.e_port, lcd.e_pin, 1);
     mcu.delay(lcd.pulse_delay);
-    mcu.clear_pin(lcd.e_port, lcd.e_pin);
+    mcu.write_pin(lcd.e_port, lcd.e_pin, 0);
 }
 
-void lcd_update(uint16_t data) {
-    mcu.write_pin(lcd.rs_port, lcd.rs_pin, data & RS);
-    mcu.write_pin(lcd.rw_port, lcd.rw_pin, data & RW);
-    mcu.write_pin(lcd.d7_port, lcd.d7_pin, data & D7);
-    mcu.write_pin(lcd.d6_port, lcd.d6_pin, data & D6);
-    mcu.write_pin(lcd.d5_port, lcd.d5_pin, data & D5);
-    mcu.write_pin(lcd.d4_port, lcd.d4_pin, data & D4);
-    mcu.write_pin(lcd.d3_port, lcd.d3_pin, data & D3);
-    mcu.write_pin(lcd.d2_port, lcd.d2_pin, data & D2);
-    mcu.write_pin(lcd.d1_port, lcd.d1_pin, data & D1);
+void lcd_update(uint8_t data) {
+    // mcu.write_pin(lcd.rs_port, lcd.rs_pin, data & RS >> 9);
+    // mcu.write_pin(lcd.rw_port, lcd.rw_pin, data & RW >> 8);
+    mcu.write_pin(lcd.d7_port, lcd.d7_pin, data & D7 >> 7);
+    mcu.write_pin(lcd.d6_port, lcd.d6_pin, data & D6 >> 6);
+    mcu.write_pin(lcd.d5_port, lcd.d5_pin, data & D5 >> 5);
+    mcu.write_pin(lcd.d4_port, lcd.d4_pin, data & D4 >> 4);
+    mcu.write_pin(lcd.d3_port, lcd.d3_pin, data & D3 >> 3);
+    mcu.write_pin(lcd.d2_port, lcd.d2_pin, data & D2 >> 2);
+    mcu.write_pin(lcd.d1_port, lcd.d1_pin, data & D1 >> 1);
     mcu.write_pin(lcd.d0_port, lcd.d0_pin, data & D0);
+
+    #ifdef DEBUG
+
+    //printf("lcd_update: %04x\r\n", data);
+    printf("lcd_update: %02X, %02X\r\n", data & LCD_COMMAND, data & LCD_DATA);
+    #endif
 
     lcd_pulse();
 }
@@ -55,15 +62,17 @@ void lcd_init() {
 
 	for(size_t i=0; i < sizeof(init_bytes); ++i)
 	{
-		mcu.delay(200);
-		lcd_update(init_bytes[i]);
+		lcd_send_command(init_bytes[i]);
+        mcu.delay(200);
 	}
 
 	mcu.delay(20);
 }
 
 void lcd_send_char(char c) {
-    lcd_update(c | LCD_DATA);
+    //mcu.write_pin(lcd.rs_port, lcd.rs_pin, );
+    //mcu.write_pin(lcd.rw_port, lcd.rw_pin, c & RW >> 8);
+    lcd_update(c & LCD_DATA);
 }
 
 void lcd_send_string(const char *s) {
@@ -73,5 +82,5 @@ void lcd_send_string(const char *s) {
 }
 
 void lcd_send_command(uint8_t command) {
-    lcd_update(command | LCD_COMMAND);
+    lcd_update(command & LCD_COMMAND);
 }

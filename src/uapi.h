@@ -19,7 +19,7 @@ typedef enum
 
 void delay(volatile uint32_t ms);
 void write_bit(volatile uint32_t reg, volatile uint32_t shift, rst_t value);
-void write(volatile uint32_t reg, uint32_t value);
+void write(volatile uint32_t reg, volatile uint32_t value);
 rst_t read_bit(volatile uint32_t reg, volatile uint32_t shift);
 void toggle_bit(volatile uint32_t reg, volatile uint32_t shift);
 void set_bit(volatile uint32_t reg, volatile uint32_t shift);
