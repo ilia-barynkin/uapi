@@ -1,2 +1,2 @@
-add_subdirectory(uapi)
-#add_subdirectory(lcd)
+add_subdirectory(uapi_stm32_hal)
+add_subdirectory(lcd)

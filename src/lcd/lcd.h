@@ -1,7 +1,7 @@
 #ifndef LCD_H
 #define LCD_H
 
-#include "uapi.h"
+#include "../../include/uapi.h"
 
 typedef struct lcd_interface {
     port_t rs_port;
@@ -27,7 +27,7 @@ typedef struct lcd_interface {
     port_t d7_port;
     pin_t d7_pin;
 
-    uint32_t pulse_delay;
+    u32_t pulse_delay;
 } lcd_interface;
 
 extern lcd_interface lcd;
