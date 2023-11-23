@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "src/uapi/uapi_stm32_hal",
+		"source" : "src/uapi/uapi_stm32_hal"
+	}
+}

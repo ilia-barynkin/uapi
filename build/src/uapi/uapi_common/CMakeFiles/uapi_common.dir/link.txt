@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-ar qc ../../../lib/libuapi_common.a CMakeFiles/uapi_common.dir/uapi_common.c.o
+/usr/bin/arm-none-eabi-ranlib ../../../lib/libuapi_common.a

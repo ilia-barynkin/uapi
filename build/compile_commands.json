@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_common",
+  "command": "/usr/bin/arm-none-eabi-gcc --sysroot=/usr/arm-none-eabi  -I/home/ilia/repos/lcd_st7066/src/uapi/include -g -std=c17 -o CMakeFiles/uapi_common.dir/uapi_common.c.o -c /home/ilia/repos/lcd_st7066/src/uapi/uapi_common/uapi_common.c",
+  "file": "/home/ilia/repos/lcd_st7066/src/uapi/uapi_common/uapi_common.c",
+  "output": "src/uapi/uapi_common/CMakeFiles/uapi_common.dir/uapi_common.c.o"
+},
+{
+  "directory": "/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_stm32_hal",
+  "command": "/usr/bin/arm-none-eabi-gcc --sysroot=/usr/arm-none-eabi  -I/home/ilia/repos/lcd_st7066/src/uapi/include -g -std=c17 -o CMakeFiles/uapi_stm32_hal.dir/uapi_stm32_hal.c.o -c /home/ilia/repos/lcd_st7066/src/uapi/uapi_stm32_hal/uapi_stm32_hal.c",
+  "file": "/home/ilia/repos/lcd_st7066/src/uapi/uapi_stm32_hal/uapi_stm32_hal.c",
+  "output": "src/uapi/uapi_stm32_hal/CMakeFiles/uapi_stm32_hal.dir/uapi_stm32_hal.c.o"
+}
+]

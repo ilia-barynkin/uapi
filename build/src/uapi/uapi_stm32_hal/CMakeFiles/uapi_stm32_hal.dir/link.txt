@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-ar qc ../../../lib/libuapi_stm32_hal.a CMakeFiles/uapi_stm32_hal.dir/uapi_stm32_hal.c.o
+/usr/bin/arm-none-eabi-ranlib ../../../lib/libuapi_stm32_hal.a

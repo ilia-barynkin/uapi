@@ -1,0 +1,12 @@
+/home/ilia/repos/lcd_st7066/build/CMakeFiles/edit_cache.dir
+/home/ilia/repos/lcd_st7066/build/CMakeFiles/rebuild_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/CMakeFiles/edit_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/CMakeFiles/rebuild_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/CMakeFiles/edit_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/CMakeFiles/rebuild_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_common/CMakeFiles/uapi_common.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_common/CMakeFiles/edit_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_common/CMakeFiles/rebuild_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_stm32_hal/CMakeFiles/uapi_stm32_hal.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_stm32_hal/CMakeFiles/edit_cache.dir
+/home/ilia/repos/lcd_st7066/build/src/uapi/uapi_stm32_hal/CMakeFiles/rebuild_cache.dir
