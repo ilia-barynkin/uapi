@@ -1,9 +1,10 @@
 #include "../../include/uapi.h"
 #include "lcd.h"
+#include "assert.h"
 
 #include "main.h"
 
-lcd_interface lcd = {
+lcd_interface_t lcd = {
     .rs_port = LCD_RS_GPIO_Port,
     .rs_pin = LCD_RS_Pin,
     .rw_port = LCD_RW_GPIO_Port,
@@ -29,53 +30,70 @@ lcd_interface lcd = {
     .pulse_delay = 5
 };
 
-uint16_t lcd_state = 0;
-
 void lcd_flush() {
     mcu.write_pin(lcd.e_port, lcd.e_pin, 1);
     mcu.delay(lcd.pulse_delay);
     mcu.write_pin(lcd.e_port, lcd.e_pin, 0);
     mcu.delay(lcd.pulse_delay);
-    lcd_state = 0;
 }
 
-void lcd_update() {
-    // TODO: implement finite state machine
-    mcu.write_pin(lcd.rs_port, lcd.rs_pin, (lcd_state & LCD_RS) >> 9);
-    mcu.write_pin(lcd.rw_port, lcd.rw_pin, (lcd_state & LCD_RW) >> 8);
-    mcu.write_pin(lcd.d7_port, lcd.d7_pin, (lcd_state & LCD_D7) >> 7);
-    mcu.write_pin(lcd.d6_port, lcd.d6_pin, (lcd_state & LCD_D6) >> 6);
-    mcu.write_pin(lcd.d5_port, lcd.d5_pin, (lcd_state & LCD_D5) >> 5);
-    mcu.write_pin(lcd.d4_port, lcd.d4_pin, (lcd_state & LCD_D4) >> 4);
-    mcu.write_pin(lcd.d3_port, lcd.d3_pin, (lcd_state & LCD_D3) >> 3);
-    mcu.write_pin(lcd.d2_port, lcd.d2_pin, (lcd_state & LCD_D2) >> 2);
-    mcu.write_pin(lcd.d1_port, lcd.d1_pin, (lcd_state & LCD_D1) >> 1);
-    mcu.write_pin(lcd.d0_port, lcd.d0_pin, (lcd_state & LCD_D0) >> 0);
+void lcd_update(u32_t flags) {
+    lcd_state_t* state = (lcd_state_t*)&flags;
+
+    #ifdef DEBUG
+    assert((flags & LCD_RS) >> 9 == state->rs);
+    assert((flags & LCD_RW) >> 8 == state->rw);
+    assert((flags & LCD_D7) >> 7 == state->d7);
+    assert((flags & LCD_D6) >> 6 == state->d6);
+    assert((flags & LCD_D5) >> 5 == state->d5);
+    assert((flags & LCD_D4) >> 4 == state->d4);
+    assert((flags & LCD_D3) >> 3 == state->d3);
+    assert((flags & LCD_D2) >> 2 == state->d2);
+    assert((flags & LCD_D1) >> 1 == state->d1);
+    assert((flags & LCD_D0) >> 0 == state->d0);
+    #endif
+
+    mcu.write_pin(lcd.rs_port, lcd.rs_pin, (flags & LCD_RS) >> 9);
+    mcu.write_pin(lcd.rw_port, lcd.rw_pin, (flags & LCD_RW) >> 8);
+    mcu.write_pin(lcd.d7_port, lcd.d7_pin, (flags & LCD_D7) >> 7);
+    mcu.write_pin(lcd.d6_port, lcd.d6_pin, (flags & LCD_D6) >> 6);
+    mcu.write_pin(lcd.d5_port, lcd.d5_pin, (flags & LCD_D5) >> 5);
+    mcu.write_pin(lcd.d4_port, lcd.d4_pin, (flags & LCD_D4) >> 4);
+    mcu.write_pin(lcd.d3_port, lcd.d3_pin, (flags & LCD_D3) >> 3);
+    mcu.write_pin(lcd.d2_port, lcd.d2_pin, (flags & LCD_D2) >> 2);
+    mcu.write_pin(lcd.d1_port, lcd.d1_pin, (flags & LCD_D1) >> 1);
+    mcu.write_pin(lcd.d0_port, lcd.d0_pin, (flags & LCD_D0) >> 0);
 
     lcd_flush();
 }
 
-// TODO: re-implement this as a more idiomatic C
+lcd_state_t lcd_read() {
+    lcd_state_t state;
+    state.d7 = mcu.read_pin(lcd.d7_port, lcd.d7_pin);
+    state.d6 = mcu.read_pin(lcd.d6_port, lcd.d6_pin);
+    state.d5 = mcu.read_pin(lcd.d5_port, lcd.d5_pin);
+    state.d4 = mcu.read_pin(lcd.d4_port, lcd.d4_pin);
+    state.d3 = mcu.read_pin(lcd.d3_port, lcd.d3_pin);
+    state.d2 = mcu.read_pin(lcd.d2_port, lcd.d2_pin);
+    state.d1 = mcu.read_pin(lcd.d1_port, lcd.d1_pin);
+    state.d0 = mcu.read_pin(lcd.d0_port, lcd.d0_pin);
+    state.rs = mcu.read_pin(lcd.rs_port, lcd.rs_pin);
+    state.rw = mcu.read_pin(lcd.rw_port, lcd.rw_pin);
+    return state;
+}
 
 void lcd_init() {
-    char init_bytes[]={0x30,0x30,0x30,0x38,0x10,0x2,0xc,0x1};
-
-	for(size_t i=0; i < init_bytes; ++i)
-	{
-        //lcd_state &= ~LCD_RS;
-        lcd_state = init_bytes[i];
-		//lcd_send_command(init_bytes[i]);
-        lcd_update();
-        mcu.delay(200);
-	}
-
-	mcu.delay(20);
+    mcu.delay(WAIT_TIME_AFTER_POWER_ON);
+    lcd_update(LCD_INIT);
+    mcu.delay(WAIT_TIME_INIT_FIRST);
+    lcd_update(LCD_INIT);
+    mcu.delay(WAIT_TIME_INIT_SECOND);
+    lcd_update(LCD_INIT);
+    mcu.delay(WAIT_TIME_INIT_FINAL);
 }
 
 void lcd_send_char(char c) {
-    lcd_state = c;
-    lcd_state |= LCD_RS;
-    lcd_update();
+    lcd_update(LCD_RS | c);
 }
 
 void lcd_write_string(const char *s) {
@@ -84,6 +102,7 @@ void lcd_write_string(const char *s) {
     }
 }
 
-// void lcd_send_command(uint16_t command) {
-//     lcd_update(command | LCD_RS);
-// }
+lcd_state_t lcd_read_busy_flag() {
+    lcd_update(LCD_READ_BUSY_FLAG);
+    return lcd_read();
+}

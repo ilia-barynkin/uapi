@@ -3,7 +3,12 @@
 
 #include "../../include/uapi.h"
 
-typedef struct lcd_interface {
+#define WAIT_TIME_AFTER_POWER_ON 20
+#define WAIT_TIME_INIT_FIRST 5
+#define WAIT_TIME_INIT_SECOND 120
+#define WAIT_TIME_INIT_FINAL 20
+
+typedef struct lcd_interface_t {
     port_t rs_port;
     pin_t rs_pin;
     port_t rw_port;
@@ -28,9 +33,9 @@ typedef struct lcd_interface {
     pin_t d7_pin;
 
     u32_t pulse_delay;
-} lcd_interface;
+} lcd_interface_t;
 
-extern lcd_interface lcd;
+extern lcd_interface_t lcd;
 
 typedef enum {
     LCD_RS = 1 << 9,
@@ -43,37 +48,54 @@ typedef enum {
     LCD_D2 = 1 << 2,
     LCD_D1 = 1 << 1,
     LCD_D0 = 1 << 0,
-    LCD_ALL_DATA_LINES = LCD_D7 | LCD_D6 | LCD_D5 | LCD_D4 | LCD_D3 | LCD_D2 | LCD_D1 | LCD_D0,
 
-    LCD_INSTRUCTION = ~LCD_RS | LCD_ALL_DATA_LINES,
-    LCD_DATA = LCD_RS | LCD_ALL_DATA_LINES,
+    LCD_INSTRUCTION = ~LCD_RS,
+    LCD_DATA = LCD_RS,
 
-    LCD_WRITE = ~LCD_RW & (LCD_INSTRUCTION | LCD_DATA),
-    LCD_READ = LCD_RW | (LCD_INSTRUCTION | LCD_DATA),
-
-    LCD_READ_DATA = LCD_READ & LCD_DATA,
-    LCD_WRITE_DATA = LCD_WRITE & LCD_DATA,
+    LCD_WRITE = ~LCD_RW,
+    LCD_READ = LCD_RW,
 
     // INSTRUCTIONS
-    LCD_CLEAR = ~(LCD_INSTRUCTION ^ LCD_D0),
-    LCD_RETURN_HOME = ~(LCD_INSTRUCTION ^ LCD_D1),
-    LCD_ENTRY_MODE_SET = ~(LCD_INSTRUCTION ^ LCD_D2),
-    LCD_DISPLAY_ON_OFF = ~(LCD_INSTRUCTION ^ LCD_D3 | LCD_D2 | LCD_D1),
-    LCD_DISPLAY_ON = ~(LCD_INSTRUCTION ^ LCD_D3 | LCD_D2),
-    LCD_CURSOR_ON_OFF = ~(LCD_INSTRUCTION ^ LCD_D4),
-    LCD_SHIFT_CURSOR = ~(LCD_INSTRUCTION ^ LCD_D5),
-    LCD_SHIFT_DISPLAY = ~(LCD_INSTRUCTION ^ LCD_D6),
-    LCD_FUNCTION_SET = ~(LCD_INSTRUCTION ^ LCD_D7),
-    
-    // ad-hoc
-    LCD_INIT = 0x30 | LCD_INSTRUCTION
-} lcd_flags;
+    LCD_CLEAR = LCD_INSTRUCTION | LCD_WRITE | 0x01,
+    LCD_HOME = LCD_INSTRUCTION | LCD_WRITE | 0x02,
+    LCD_ENTRY_MODE_SET = LCD_INSTRUCTION | LCD_WRITE | 0x04,
+    LCD_DISPLAY_CONTROL = LCD_INSTRUCTION | LCD_WRITE | 0x08,
+    LCD_CURSOR_SHIFT = LCD_INSTRUCTION | LCD_WRITE | 0x10,
+    LCD_FUNCTION_SET = LCD_INSTRUCTION | LCD_WRITE | 0x20,
+    LCD_SET_CGRAM_ADDR = LCD_INSTRUCTION | LCD_WRITE | 0x40,
+    LCD_SET_DDRAM_ADDR = LCD_INSTRUCTION | LCD_WRITE | 0x80,
+    LCD_READ_BUSY_FLAG = LCD_INSTRUCTION | LCD_READ | 0x80,
+
+    LCD_CURSOR_OFF = LCD_DISPLAY_CONTROL | 0x00,
+    LCD_CURSOR_ON = LCD_DISPLAY_CONTROL | 0x01,
+    LCD_DISPLAY_OFF = LCD_DISPLAY_CONTROL | 0x02,
+    LCD_DISPLAY_ON = LCD_DISPLAY_CONTROL | 0x03,
+
+    LCD_CURSOR_LEFT = LCD_CURSOR_SHIFT | 0x00,
+    LCD_CURSOR_RIGHT = LCD_CURSOR_SHIFT | 0x01,
+
+    LCD_INIT = 0x30
+
+} lcd_flags_t;
+
+typedef struct lcd_state_t {
+    u32_t d0 : 1;
+    u32_t d1 : 1;
+    u32_t d2 : 1;
+    u32_t d3 : 1;
+    u32_t d4 : 1;
+    u32_t d5 : 1;
+    u32_t d6 : 1;
+    u32_t d7 : 1;
+    u32_t rw : 1;
+    u32_t rs : 1;
+} lcd_state_t;
 
 void lcd_flush();
 void lcd_update();
 void lcd_init();
 void lcd_send_char(char c);
 void lcd_write_string(const char *s);
-//void lcd_send_command(uint16_t command);
+lcd_state_t lcd_read_busy_flag();
 
 #endif  // LCD_H
